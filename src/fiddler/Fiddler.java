@@ -13,11 +13,11 @@ public class Fiddler {
                     Socket client = serverSocket.accept();
                     new ProxyServer(client);
                 } catch (Exception e) {
-                    System.out.print("Something was wrong " + e);
+                    System.out.print("\nSomething was wrong " + e);
                 }
             }
         } catch (Exception e) {
-            System.out.print("Error opening socket");
+            System.out.print("\nError opening socket");
         }
     }
 

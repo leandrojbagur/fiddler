@@ -24,6 +24,13 @@ Así queda ejecutándose el proxy y usted podra observar los bytes
 transferidos entre el cliente y el servidor, siempre y cuando el 
 browser esté bien configurado.
 
+Tener en cuenta que el proxy siempre va a escuchar el puerto 8080.
+Para realizar una prueba, usted puede abrir el browser Chrome,
+ el cual ya debe estar configurado e escribir la siguiente URL:
+ http://www.example.com
+ <br> En la terminal, usted deberia ver los bytes enviados y recibidos
+ por medio de esta petición.
+
 # Configuración de Chrome
 
 Para configurar el browser, lo que se debe hacer es ir a la 
