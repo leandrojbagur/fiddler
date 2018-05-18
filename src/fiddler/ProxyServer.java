@@ -3,12 +3,6 @@ package fiddler;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.net.Socket;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class ProxyServer implements Runnable {
@@ -19,7 +13,6 @@ public class ProxyServer implements Runnable {
     private static int BUFFER_SIZE = 8192;
     private static int THREAD_COUNT = 0;
     private static String CRLF = "\r\n";
-    private static String FILENAME = "fiddler.txt";
 
     ProxyServer(Socket client) {
         this.client = client;
@@ -32,11 +25,10 @@ public class ProxyServer implements Runnable {
     public void run() {
         try {
             byte[] buffer = new byte[BUFFER_SIZE];
-            Path file = Paths.get(FILENAME);
 
             // Get request from client
             BufferedInputStream clientInputStream = new BufferedInputStream(client.getInputStream());
-            int clientBytes = clientInputStream.read(buffer);
+            System.out.print("\nBytes from client: " + clientInputStream.read(buffer));
 
             // Get host from request and send request to real server
             String clientRequest = new String(buffer);
@@ -49,18 +41,13 @@ public class ProxyServer implements Runnable {
             BufferedOutputStream clientOutputStream = new BufferedOutputStream(client.getOutputStream());
             BufferedInputStream serverInputStream = new BufferedInputStream(server.getInputStream());
             buffer = new byte[BUFFER_SIZE];
-            int buffsize = 0;
-            int internetBytes = 0;
-            while ((buffsize = serverInputStream.read(buffer)) != -1) {
-                clientOutputStream.write(buffer, 0, buffsize);
-                internetBytes += buffsize;
+            int buffSize;
+            int serverBytes = 0;
+            while ((buffSize = serverInputStream.read(buffer)) != -1) {
+                clientOutputStream.write(buffer, 0, buffSize);
+                serverBytes += buffSize;
             }
-
-            // Write server bytes into the file
-            Files.write(file, Arrays.asList("Bytes from client " + clientBytes,
-                    "Bytes from server " + internetBytes),
-                    Charset.forName("UTF-8"),
-                    StandardOpenOption.APPEND);
+            System.out.print("\nBytes from server: " + serverBytes);
 
             // Close connections
             clientOutputStream.flush();
